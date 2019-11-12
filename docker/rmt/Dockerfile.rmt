@@ -1,0 +1,16 @@
+# RMT Server for OpenSUSE
+
+ARG DOCKER_FROM
+
+FROM ${DOCKER_FROM}
+
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+RUN zypper --non-interactive ar -f https://download.opensuse.org/repositories/systemsmanagement:/SCC:/RMT/openSUSE_Leap_15.1/systemsmanagement:SCC:RMT.repo
+RUN zypper --gpg-auto-import-keys refresh
+RUN zypper --non-interactive in rmt-server
+
+EXPOSE 9600/tcp
+
+CMD [" ","--verbose","--port=9600"]

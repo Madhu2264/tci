@@ -198,6 +198,19 @@ docker_from_ubuntu() {
 	esac
 }
 
+docker_from_opensuse() {
+	local a="$(get_arch $(uname -m))"
+
+	case "${a}" in
+		amd64) echo "opensuse/leap:15.1" ;;
+		arm64) echo "arm64v8/opensuse/leap:15.1" ;;
+		*)
+			echo "${name}: ERROR: Unknown arch ${a}" >&2
+			exit 1
+			;;
+	esac
+}
+
 show_tag () {
 	echo "${DOCKER_TAG}"
 }
@@ -227,6 +240,8 @@ openjdk)
 	DOCKER_FROM=${DOCKER_FROM:-"$(docker_from_openjdk)"} ;;
 ubuntu)
 	DOCKER_FROM=${DOCKER_FROM:-"$(docker_from_ubuntu)"} ;;
+opensuse)
+	DOCKER_FROM=${DOCKER_FROM:-"$(docker_from_opensuse)"} ;;
 *)
 	echo "${name}: ERROR: Bad project_from: '${project_from}'" >&2
 	exit 1
