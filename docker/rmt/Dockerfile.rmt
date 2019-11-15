@@ -11,6 +11,12 @@ RUN zypper --non-interactive ar -f https://download.opensuse.org/repositories/sy
 RUN zypper --gpg-auto-import-keys refresh
 RUN zypper --non-interactive in rmt-server
 
-EXPOSE 9600/tcp
+RUN zypper install -y dbus-1 systemd-sysvinit
+RUN cp /usr/lib/systemd/system/dbus.service /etc/systemd/system/; \
+    sed -i 's/OOMScoreAdjust=-900//' /etc/systemd/system/dbus.service
 
-CMD [" ","--verbose","--port=9600"]
+VOLUME ["/sys/fs/cgroup", "/run"]
+
+EXPOSE 4224
+
+CMD ["/sbin/init"]
